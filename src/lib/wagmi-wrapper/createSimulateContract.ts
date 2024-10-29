@@ -1,3 +1,0 @@
-function createSimulateContract() {
-  return [];
-}
