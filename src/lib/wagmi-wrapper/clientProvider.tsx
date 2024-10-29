@@ -1,4 +1,3 @@
-// ConfigProvider.jsx
 import { createContext, useContext, JSX, createSignal } from "solid-js";
 import { useConfig } from "./configProvider";
 import { getClient, watchClient } from "@wagmi/core";

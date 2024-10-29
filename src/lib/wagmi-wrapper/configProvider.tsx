@@ -1,20 +1,28 @@
-// ConfigProvider.jsx
-import { createContext, useContext, JSX } from "solid-js";
-import { config } from "../config";
+import { http, createConfig, injected, createStorage } from "@wagmi/core";
+import { sepolia } from "@wagmi/core/chains";
+import { createContext, useContext, type JSX } from "solid-js";
 
-const ConfigContext = createContext<{ config: typeof config }>();
-export const ConfigProvider = ({ children }: { children: JSX.Element }) => {
+export const config = createConfig({
+  chains: [sepolia],
+  connectors: [injected()],
+  storage: createStorage({ storage: window?.localStorage }),
+  transports: {
+    [sepolia.id]: http(),
+  },
+});
+
+const ConfigContext = createContext(config);
+const ConfigProvider = ({ children }: { children: JSX.Element }) => {
   return (
-    <ConfigContext.Provider value={{ config }}>
-      {children}
-    </ConfigContext.Provider>
+    <ConfigContext.Provider value={config}>{children}</ConfigContext.Provider>
   );
 };
 
 export function useConfig() {
   const context = useContext(ConfigContext);
-  if (!context) {
-    throw new Error("useConfig must be within ConfigProvider!");
-  }
+  // if (context) {
+  //   throw new Error("useConfig must be within ConfigProvider!");
+  // }
   return context;
 }
+export default ConfigProvider;
